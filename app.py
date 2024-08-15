@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, Response, make_response, request
 import requests
+from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
+asgi_app = WsgiToAsgi(app)
 
 @app.route("/api/v1/getCertificate", methods=["POST"])
 def getCertificate():
@@ -56,4 +58,5 @@ def getCertificate():
         return jsonify({"error": "Error in fetching UDID Number Details"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    import uvicorn
+    uvicorn.run(asgi_app, host='0.0.0.0', port=5001)
